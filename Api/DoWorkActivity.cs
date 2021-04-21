@@ -13,11 +13,10 @@ namespace demo_az_durable_function_async_api
     public static class DoWorkActivity
     {
         [FunctionName("DoWorkActivity")]
-        public static string Run([ActivityTrigger] string name, ILogger log)
+        public static string Run([ActivityTrigger] int waitSeconds, ILogger log)
         {
-            Thread.Sleep(60000);
-            log.LogInformation($"Saying hello to {name}.");
-            return $"Hello {name}!";
+            Thread.Sleep(waitSeconds * 1000);
+            return $"Payload";
         }
     }
 }

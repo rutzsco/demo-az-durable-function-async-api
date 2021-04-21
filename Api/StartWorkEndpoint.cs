@@ -12,18 +12,18 @@ namespace demo_az_durable_function_async_api
     public static class StartWorkEndpoint
     {
         [FunctionName("Workflow")]
-        public static async Task<List<string>> RunOrchestrator( [OrchestrationTrigger] IDurableOrchestrationContext context)
+        public static async Task<List<string>> RunOrchestrator([OrchestrationTrigger] IDurableOrchestrationContext context)
         {
             var outputs = new List<string>();
-            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", "Tokyo"));
+            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", 60));
             return outputs;
         }
 
 
         [FunctionName("StartWorkEndpoint")]
         public static async Task<HttpResponseMessage> HttpStart([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestMessage req,
-            [DurableClient] IDurableOrchestrationClient starter,
-            ILogger log)
+                                                                [DurableClient] IDurableOrchestrationClient starter,
+                                                                ILogger log)
         {
 
             string instanceId = await starter.StartNewAsync("Workflow", null);

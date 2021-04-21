@@ -25,7 +25,7 @@ stages:
       displayName: Deploy
       environment: ${{ parameters.environment }}
       pool:
-        vmImage: 'vs2017-win2016'
+        vmImage: 'ubuntu-latest'
   
       strategy:
         runOnce:
@@ -38,7 +38,7 @@ stages:
                 azureSubscription: ${{ parameters.azureSubscription }}
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.region }}
-                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/function-app-premium.json'
+                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/function-app-consumption.json'
                 overrideParameters: '-appName ${{ parameters.functionAppName }} -storageAccountName ${{ parameters.storageAccountName }}'
                 deploymentOutputs: ResourceGroupDeploymentOutputs
 
