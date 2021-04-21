@@ -19,4 +19,4 @@ stages:
     resourceGroupName: 'demo-function-async-api-ci'
     storageAccountName: 'azfuncasynapici'
     region: 'East US'
-    packageName: 'API.zip'
+    packageName: 'Api.zip'
