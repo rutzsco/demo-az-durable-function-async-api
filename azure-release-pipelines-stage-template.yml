@@ -1,0 +1,52 @@
+parameters: 
+- name: stageName
+  default: ''
+- name: environment
+  default: ''
+- name: azureSubscription
+  default: ''
+- name: functionAppName
+  default: ''
+- name: resourceGroupName
+  default: ''
+- name: storageAccountName
+  default: ''
+- name: region
+  default: ''
+- name: packageName
+  default: ''  
+
+stages:
+  - stage: ${{ parameters.stageName }}
+    displayName: ${{ parameters.stageName }}
+
+    jobs:
+    - deployment: Deploy
+      displayName: Deploy
+      environment: ${{ parameters.environment }}
+      pool:
+        vmImage: 'vs2017-win2016'
+  
+      strategy:
+        runOnce:
+          deploy:
+  
+            steps:
+            - task: AzureResourceGroupDeployment@2
+              displayName: '1. Create Function Infrastructure'
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                resourceGroupName: ${{ parameters.resourceGroupName }}
+                location: ${{ parameters.region }}
+                csmFile: '$(Pipeline.Workspace)/build/Infrastructure/function-app-premium.json'
+                overrideParameters: '-appName ${{ parameters.functionAppName }} -storageAccountName ${{ parameters.storageAccountName }}'
+                deploymentOutputs: ResourceGroupDeploymentOutputs
+
+            - task: AzureFunctionApp@1
+              displayName: '2. Azure functions app deploy'
+              inputs:
+                azureSubscription: '$(azureSubscription)'
+                appType: functionApp
+                appName: ${{ parameters.functionAppName }}
+                package: '$(Pipeline.Workspace)/build/App/${{ parameters.packageName }}'
+                AppSettings: ''

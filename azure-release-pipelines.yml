@@ -1,0 +1,32 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: build
+    source: 'demo-function-yaml-cicd - Build'
+  
+variables:
+  vmImageName: 'vs2017-win2016'
+  azureSubscription: 'Rutz Internal Demo Account (164a84cf-b099-4567-a527-c2a8143a32c7)'
+
+stages:
+- template: azure-release-pipelines-stage-template.yml
+  parameters:
+    stageName: 'CI'
+    environment: 'API-CI'
+    azureSubscription: ${{ variables.azureSubscription }}
+    functionAppName: 'demo-function-api-ci'
+    resourceGroupName: 'demo-function-api-ci'
+    storageAccountName: 'azfunctionsdapici'
+    region: 'Central US'
+    packageName: 'Demo.Function.API.zip'
+- template: azure-release-pipelines-stage-template.yml
+  parameters:
+    stageName: 'QA'
+    environment: 'API-QA'
+    azureSubscription: ${{ variables.azureSubscription }}
+    functionAppName: 'demo-function-api-qa'
+    resourceGroupName: 'demo-function-api-qa'
+    storageAccountName: 'azfunctionsdapiqa'
+    region: 'Central US'
+    packageName: 'Demo.Function.API.zip'
