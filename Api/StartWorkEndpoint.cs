@@ -20,7 +20,9 @@ namespace demo_az_durable_function_async_api
         {
             var outputs = new List<string>();
             var duration = context.GetInput<int>();
-            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", duration));
+            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", duration / 3));
+            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", duration / 3));
+            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", duration / 3));
             return outputs;
         }
 
