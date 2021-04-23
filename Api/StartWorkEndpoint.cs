@@ -42,7 +42,7 @@ namespace demo_az_durable_function_async_api
         {
             var duration = req.Query["duration"];
             if (string.IsNullOrEmpty(duration))
-                return 60;
+                return 300;
             try
             {
                 int result = Int32.Parse(duration);
