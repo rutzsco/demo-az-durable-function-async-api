@@ -18,5 +18,16 @@ namespace demo_az_durable_function_async_api
             Thread.Sleep(waitSeconds * 1000);
             return $"Payload";
         }
+
+        [FunctionName("Workflow")]
+        public static async Task<List<string>> RunOrchestrator([OrchestrationTrigger] IDurableOrchestrationContext context)
+        {
+            var outputs = new List<string>();
+            var duration = context.GetInput<int>();
+            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", duration / 3));
+            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", duration / 3));
+            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", duration / 3));
+            return outputs;
+        }
     }
 }

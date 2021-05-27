@@ -15,20 +15,9 @@ namespace demo_az_durable_function_async_api
 {
     public static class StartWorkEndpoint
     {
-        [FunctionName("Workflow")]
-        public static async Task<List<string>> RunOrchestrator([OrchestrationTrigger] IDurableOrchestrationContext context)
-        {
-            var outputs = new List<string>();
-            var duration = context.GetInput<int>();
-            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", duration / 3));
-            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", duration / 3));
-            outputs.Add(await context.CallActivityAsync<string>("DoWorkActivity", duration / 3));
-            return outputs;
-        }
-
 
         [FunctionName("StartWorkEndpoint")]
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
                                                     [DurableClient] IDurableOrchestrationClient starter,
                                                     ILogger log)
         {
